@@ -1,57 +1,39 @@
 
 const socket = io()
 
-const chectSocketStatus = () => {
-  console.log(`estado del socket : ${socket.connected}`)
-
-}
-console.log(`socket init`)
 
 socket.on('connect', () => {
   console.log(`el  socket se a conectado : ${socket.id}`)
-  chectSocketStatus()
-
 })
-
-socket.on('connectionEvery', (data) => {
-  console.log(data)
-
-})
-
-socket.on('welcome', (data) => {
-  const text1 = document.getElementById('text1')
-  text1.innerHTML = data
-  console.log(`on welcome ${data}`)
-
-})
-
-const button1 = document.getElementById('button1')
-button1.addEventListener('click', () => {
-  console.log(`ser preciono el boton `)
-  socket.emit('bottonPrecionado', 'se preciono el boton')
-
-})
-
-const buttonSaludar = document.getElementById('buttonSaludar')
-buttonSaludar.addEventListener('click', () => {
-  console.log(`ser preciono el boton buttonSaludar `)
-  socket.emit('saludarUltimaPersona', 'hola como estas')
-
-})
-
-
 
 socket.on('disconnect', () => {
   console.log(`el  socket se a desconectado : ${socket.id}`)
-  chectSocketStatus()
 })
 
+const circle = document.getElementById('circle')
+const drawCircle = (position) => {
+  circle.style.top = position.top
+  circle.style.left = position.left
+}
+const drag = e => {
 
-socket.on('saludo', (data) => {
-  console.log(data)
+  const position = {
+    top: e.clientY + "px",
+    left: e.clientX + "px"
+  };
+
+  drawCircle(position)
+
+  socket.emit("circle position", position);
+
+}
+circle.addEventListener('mousedown', e => {
+  circle.addEventListener('mousemove', drag)
+})
+circle.addEventListener('mouseup', e => {
+  circle.removeEventListener('mousemove', drag)
 })
 
-socket.io.on('reconnect_attempt', () => {
-  console.log(`estoy intentando reconectarme`)
-  chectSocketStatus()
+socket.on('move circle', position => {
+  drawCircle(position)
 })

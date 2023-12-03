@@ -31,19 +31,8 @@ io.on('connection', socket => {
 
   })
 
-  socket.emit('welcome', 'hola bienbenido')
-
-
-  socket.on('bottonPrecionado', (data) => {
-    console.log(`bottonPrecionado : ${data}`)
-
-  })
-
-  socket.on('saludarUltimaPersona', (data) => {
-    const lastSocket = listSockets[listSockets.length - 1]
-    console.log(`se esta saludando : ${data}`)
-
-    io.to(lastSocket).emit('saludo', data)
+  socket.on('circle position', pocition => {
+    socket.broadcast.emit('move circle', pocition)
   })
 
 
