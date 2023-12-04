@@ -1,15 +1,22 @@
 {
   "name": "websocket",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Mi proyecto de websocket",
+  "main": "src/index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.js"
   },
-  "author": "",
+  "author": "PedroPab",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PedroPab/WebSocket"
+  },
+  "keywords": [
+    "websocket"
+  ],
   "dependencies": {
     "express": "^4.18.2",
     "socket.io": "^4.7.2"
