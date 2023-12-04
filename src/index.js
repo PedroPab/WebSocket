@@ -45,7 +45,6 @@ io.on('connection', socket => {
     const roomSelect = listRooms[room]
     if (!roomSelect) return
 
-    socket.join(roomSelect)
     const roomindex = socket.connectedRoom.findIndex(eRoom => eRoom == room)
     if (roomindex == -1) {
       console.log(`no existe esta sala 404 `)
@@ -53,7 +52,7 @@ io.on('connection', socket => {
     }
 
     socket.connectedRoom.splice(roomindex, 1)
-
+    socket.leave(roomSelect)
   })
   //se envia un mensage
   socket.on(`message`, ({ room, message }) => {
