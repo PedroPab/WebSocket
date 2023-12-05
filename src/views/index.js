@@ -1,56 +1,28 @@
 
+const socket = io()
 
-
-const user = prompt(`escribe tu usuario`)
-
-const profesores = [
-  'JuanDc',
-  'GNX',
-  'Estefany',
-  'Fredy',
-]
-
-let socketNameSpace, group
-
-const chat = document.querySelector('#chat')
-const nameSpace = document.querySelector('#nameSpace')
-
-if (profesores.includes(user)) {
-
-  socketNameSpace = io('/teachers')
-  group = 'teachers'
-} else {
-  socketNameSpace = io('/students')
-  group = 'students'
-}
-
-// const socket = io()
-
-
-socketNameSpace.on('connect', () => {
-  console.log(`✨ el  socket se a conectado : ${socketNameSpace.id}`)
-
-  nameSpace.textContent = group
-
-
+socket.on('connect', () => {
+  console.log(`✨ el  socket se a conectado : ${socket.id}`)
 
 })
 
-socketNameSpace.on('disconnect', () => {
-  console.log(`🥊 el  socket se a desconectado : ${socketNameSpace.id}`)
-  return
+const send = document.querySelector('#send')
+const disconnect = document.querySelector('#disconnect')
+const reconnect = document.querySelector('#connect')
+
+send.addEventListener('click', () => {
+  // if (!socket.connected) return
+  socket.volatile.emit("isConnected", "esta connectado!")
 })
 
-const sendMessage = document.querySelector('#sendMessage')
-sendMessage.addEventListener('click', () => {
-  const message = prompt('escribe tu mensage:')
-  console.log("enviando el mensage", message)
-  socketNameSpace.emit('sendMessage', { message: message, user: user })
+disconnect.addEventListener('click', () => {
+  console.log(`desconectaodo`)
+
+  socket.disconnect()
 })
 
+reconnect.addEventListener('click', () => {
+  console.log(`reconectado`)
 
-socketNameSpace.on('message', (data) => {
-  const li = document.createElement(`li`)
-  li.textContent = data
-  chat.append(li)
+  socket.connect()
 })
