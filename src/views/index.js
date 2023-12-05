@@ -1,28 +1,19 @@
 
-const socket = io()
+const socket = io({
+  auth: {
+    token: '1234'
+  }
+})
 
 socket.on('connect', () => {
   console.log(`✨ el  socket se a conectado : ${socket.id}`)
 
 })
+socket.on('disconnection', () => {
+  console.log(`no se pudo conectar`)
 
-const send = document.querySelector('#send')
-const disconnect = document.querySelector('#disconnect')
-const reconnect = document.querySelector('#connect')
-
-send.addEventListener('click', () => {
-  // if (!socket.connected) return
-  socket.volatile.emit("isConnected", "esta connectado!")
 })
+socket.on('connect_error', (error) => {
+  console.log(`error de connecion `, error.data.details)
 
-disconnect.addEventListener('click', () => {
-  console.log(`desconectaodo`)
-
-  socket.disconnect()
-})
-
-reconnect.addEventListener('click', () => {
-  console.log(`reconectado`)
-
-  socket.connect()
 })

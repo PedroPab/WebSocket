@@ -19,12 +19,27 @@ app.get('/', (req, res) => {
 
 })
 
+io.use((socket, next) => {
+  const token = socket.handshake.auth.token
+
+  if (token !== '123') {
+    //no esta autenticado
+    const error = new Error('no puedes pasar')
+    error.data = {
+      details: 'no esta autorisado'
+    }
+    next(error)
+  }
+  //esta autenticado
+  next()
+
+})
+
 
 io.on('connection', socket => {
   console.log(`${socket.id} se a conectado al namespace de profes`)
 
-  socket.on('isConnected', (message) => {
-    console.log(`nes mesafge ${message}`)
+  socket.on('', () => {
   })
 
 })
