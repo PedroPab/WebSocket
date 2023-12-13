@@ -5,12 +5,24 @@ import { createServer } from 'http'
 import path from "path";
 import { Server } from 'socket.io'
 import { URL } from 'url';
+import { instrument } from "@socket.io/admin-ui";
 
 const __dirname = new URL('.', import.meta.url).pathname;
 
 const app = express()
 const httpServer = createServer(app)
-const io = new Server(httpServer)
+const io = new Server(httpServer, {
+  cors: {
+    origin: [
+      'https://admin.socket.io'
+    ],
+    credentials: false,
+  }
+})
+
+instrument(io, {
+  auth: false
+})
 
 const listSockets = []
 
