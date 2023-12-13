@@ -13,10 +13,8 @@ const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
   cors: {
-    origin: [
-      'https://admin.socket.io'
-    ],
-    credentials: false,
+    origin: ['https://admin.socket.io'],
+    credentials: true,
   }
 })
 
@@ -33,31 +31,69 @@ app.get('/', (req, res) => {
 
 })
 
-io.use((socket, next) => {
-  const token = socket.handshake.auth.token
-
-  if (token !== '123') {
-    //no esta autenticado
-    const error = new Error('no puedes pasar')
-    error.data = {
-      details: 'no esta autorisado'
-    }
-    next(error)
-  }
-  //esta autenticado
-  next()
-
-})
-
-
 io.on('connection', socket => {
-  console.log(`${socket.id} se a conectado al namespace de profes`)
+  console.log(`init connection , id: ${socket.id} `)
+  listSockets.push(socket.id)
+  console.log(`total de clientes conectados: ${io.engine.clientsCount} `)
+  socket.connectedRoom = []
+  const listRooms = {
+    'room1': `room1`,
+    'room2': `room2`,
+    'room3': `room3`,
+  }
+  //se pide conneccion a una sala
+  socket.on(`connectToRoom`, (room) => {
+    //miramos que que la sala si existe
+    const roomSelect = listRooms[room]
+    if (!roomSelect) return
 
-  socket.on('', () => {
+    socket.join(roomSelect)
+    socket.connectedRoom.push(roomSelect)
+
+  })
+  socket.on(`desconnectToRoom`, (room) => {
+    //miramos que que la sala si existe
+    const roomSelect = listRooms[room]
+    if (!roomSelect) return
+
+    const roomindex = socket.connectedRoom.findIndex(eRoom => eRoom == room)
+    if (roomindex == -1) {
+      console.log(`no existe esta sala 404 `)
+      return
+    }
+
+    socket.connectedRoom.splice(roomindex, 1)
+    socket.leave(roomSelect)
+  })
+  //se envia un mensage
+  socket.on(`message`, ({ room, message }) => {
+    //miramos que que la sala si existe
+    const roomSelect = listRooms[room]
+    if (!roomSelect) {
+      console.log(`no existe esta sala 404 `)
+      return
+    }
+
+    //miramos que si este suscrito a la sala
+    const isSuscrit = socket.connectedRoom.includes(roomSelect)
+    if (!isSuscrit) {
+      console.log(`no estas suscrito esta sala 404`)
+      return
+    }
+
+
+    io.to(roomSelect).emit(`sendMessage`, {
+      message,
+      room: roomSelect
+    })
+    console.log(`el mensage se evio`, {
+      message,
+      room: roomSelect
+    })
+
   })
 
+
 })
-
-
 
 httpServer.listen(3005)

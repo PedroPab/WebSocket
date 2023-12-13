@@ -10,7 +10,56 @@
 
 <body>
 
-  <h1>aplciacion en tiempo real</h1>
+  <h1>Chat de Salas</h1>
+  <!-- Sección de visualización de salas -->
+  <section>
+    <div class="room" id="room1">
+      <div class="room-title">Sala 1</div>
+      <!-- Contenido de la sala 1 aquí -->
+    </div>
+    <div class="room" id="room2">
+      <div class="room-title">Sala 2</div>
+      <!-- Contenido de la sala 2 aquí -->
+    </div>
+    <div class="room" id="room3">
+      <div class="room-title">Sala 3</div>
+      <!-- Contenido de la sala 3 aquí -->
+    </div>
+  </section>
+
+
+  <!-- Sección de selección de sala para enviar mensaje -->
+  <section>
+    <label for="selecRoom">Selecciona la sala para enviar el mensaje:</label>
+    <select name="selectRoom" id="selecRoom">
+      <!-- <option value="room1">Sala 1</option>
+      <option value="room2">Sala 2</option>
+      <option value="room3">Sala 3</option> -->
+    </select>
+  </section>
+
+  <!-- Sección de suscripción a salas -->
+  <section>
+    <p>Selecciona las salas a las que te quieres suscribir:</p>
+    <div>
+      <input type="checkbox" name="chechRoom1" id="chechRoom1">
+      <label for="chechRoom1">Sala 1</label>
+    </div>
+    <div>
+      <input type="checkbox" name="chechRoom2" id="chechRoom2">
+      <label for="chechRoom2">Sala 2</label>
+    </div>
+    <div>
+      <input type="checkbox" name="chechRoom3" id="chechRoom3">
+      <label for="chechRoom3">Sala 3</label>
+    </div>
+  </section>
+
+  <!-- Sección de envío de mensaje -->
+  <section>
+    <input type="text" id="message" placeholder="Escribe tu mensaje aquí">
+    <button id="enviar" type="button">Enviar Mensaje</button>
+  </section>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="./index.js"></script>
